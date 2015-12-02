@@ -382,9 +382,8 @@ func Empty(t TestingT, object interface{}, msgAndArgs ...interface{}) {
 // NotEmpty asserts that the specified object is NOT empty.  I.e. not nil, "", false, 0 or either
 // a slice or a channel with len == 0.
 //
-// if assert.NotEmpty(t, obj) {
-//   assert.Equal(t, "two", obj[1])
-// }
+// assert.NotEmpty(t, obj)
+// assert.Equal(t, "two", obj[1])
 //
 // Returns whether the assertion was successful (true) or not (false).
 func NotEmpty(t TestingT, object interface{}, msgAndArgs ...interface{}) {
@@ -733,9 +732,8 @@ func InEpsilonSlice(t TestingT, expected, actual interface{}, delta float64, msg
 // NoError asserts that a function returned no error (i.e. `nil`).
 //
 //   actualObj, err := SomeFunction()
-//   if assert.NoError(t, err) {
-//	   assert.Equal(t, actualObj, expectedObj)
-//   }
+//   assert.NoError(t, err)
+//   assert.Equal(t, actualObj, expectedObj)
 //
 // Returns whether the assertion was successful (true) or not (false).
 func NoError(t TestingT, err error, msgAndArgs ...interface{}) {
@@ -749,9 +747,8 @@ func NoError(t TestingT, err error, msgAndArgs ...interface{}) {
 // Error asserts that a function returned an error (i.e. not `nil`).
 //
 //   actualObj, err := SomeFunction()
-//   if assert.Error(t, err, "An error was expected") {
-//	   assert.Equal(t, err, expectedError)
-//   }
+//   assert.Error(t, err, "An error was expected")
+//   assert.Equal(t, err, expectedError)
 //
 // Returns whether the assertion was successful (true) or not (false).
 func Error(t TestingT, err error, msgAndArgs ...interface{}) {
@@ -763,9 +760,8 @@ func Error(t TestingT, err error, msgAndArgs ...interface{}) {
 // and that it is equal to the provided error.
 //
 //   actualObj, err := SomeFunction()
-//   if assert.Error(t, err, "An error was expected") {
-//	   assert.Equal(t, err, expectedError)
-//   }
+//   assert.Error(t, err, "An error was expected")
+//   assert.Equal(t, err, expectedError)
 //
 // Returns whether the assertion was successful (true) or not (false).
 func EqualError(t TestingT, theError error, errString string, msgAndArgs ...interface{}) {
