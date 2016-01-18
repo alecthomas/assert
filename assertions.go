@@ -12,6 +12,8 @@ import (
 	"time"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/alecthomas/repr"
 )
 
 // TestingT is an interface wrapper around *testing.T
@@ -235,8 +237,7 @@ func IsType(t TestingT, expectedType interface{}, object interface{}, msgAndArgs
 func Equal(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) {
 
 	if !ObjectsAreEqual(expected, actual) {
-		Fail(t, fmt.Sprintf("Not equal: %#v (expected)\n"+
-			"        != %#v (actual)", expected, actual), msgAndArgs...)
+		Fail(t, fmt.Sprintf("Not equal: %s", DiffValues(expected, actual)), msgAndArgs...)
 	}
 }
 
@@ -249,8 +250,7 @@ func Equal(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) 
 func EqualValues(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) {
 
 	if !ObjectsAreEqualValues(expected, actual) {
-		Fail(t, fmt.Sprintf("Not equal: %#v (expected)\n"+
-			"        != %#v (actual)", expected, actual), msgAndArgs...)
+		Fail(t, fmt.Sprintf("Not equal: %s", DiffValues(expected, actual)), msgAndArgs...)
 	}
 }
 
@@ -308,7 +308,7 @@ func Nil(t TestingT, object interface{}, msgAndArgs ...interface{}) {
 	if isNil(object) {
 		return
 	}
-	Fail(t, fmt.Sprintf("Expected nil, but got: %#v", object), msgAndArgs...)
+	Fail(t, fmt.Sprintf("Expected nil, but got: %s", repr.Repr(object)), msgAndArgs...)
 }
 
 var numericZeros = []interface{}{
@@ -455,7 +455,7 @@ func False(t TestingT, value bool, msgAndArgs ...interface{}) {
 func NotEqual(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) {
 
 	if ObjectsAreEqual(expected, actual) {
-		Fail(t, fmt.Sprintf("Should not be: %#v\n", actual), msgAndArgs...)
+		Fail(t, fmt.Sprintf("Should not be: %s\n", repr.Repr(actual)), msgAndArgs...)
 	}
 }
 
