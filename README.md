@@ -1,28 +1,36 @@
-# Go assertion library (fork of [stretchr/testify/assert](https://github.com/stretchr/testify/tree/master/assert))
+# Go assertion library (fork of [stretchr/testify/require](https://github.com/stretchr/testify/tree/master/require))
 
-This is a fork of stretchr/testify/assert that fails the current test function when an assertion fails. In my
-opinion this is more aligned with the concept of an assertion, making the package more intuitive. It
-also makes for much cleaner code, as it does not require an if statement for every potentially
-failing assertion. eg.
+This is a fork of stretchr's assertion library that makes spotting differences in equality much
+easier. It uses [repr](https://github.com/alecthomas/repr) and
+[diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch) to display structural differences
+in colour.
 
-Idiomatic usage of stretchr/testify/assert:
+## Example
+
+Given the following test:
 
 ```go
-v, err := pkg.Func()
-if assert.NoError(t, err) {
-  if assert.NotNil(t, v) {
-    if assert.Equal(t, v.Value, 1) {
-      // ...
-    }
-  }
+type Person struct {
+  Name string
+  Age  int
+}
+
+func TestDiff(t *testing.T) {
+  expected := []*Person{{"Alec", 20}, {"Bob", 21}, {"Sally", 22}}
+  actual := []*Person{{"Alex", 20}, {"Bob", 22}, {"Sally", 22}}
+  assert.Equal(t, expected, actual)
 }
 ```
 
-Idiomatic usage of this package:
+This is what testify/assert will display:
 
-```go
-v, err := pkg.Func()
-assert.NoError(t, err)
-assert.NotNil(t, v)
-assert.Equal(t, v.Value, 1)
-```
+<pre>
+--- FAIL: TestDiff (0.00s)
+        Error Trace:    example_test.go:18
+        Error:    Not equal: []*example.Person{(*example.Person)(0xc8200c27c0), (*example.Person)(0xc8200c27e0), (*example.Person)(0xc8200c2800)} (expected)
+                          != []*example.Person{(*example.Person)(0xc8200c2840), (*example.Person)(0xc8200c2860), (*example.Person)(0xc8200c2880)} (actual)
+</pre>
+
+And this is what alecthomas/assert will display:
+
+<img src="./_example/diff.png">
