@@ -1,9 +1,11 @@
 # Go assertion library (fork of [stretchr/testify/require](https://github.com/stretchr/testify/tree/master/require))
 
-This is a fork of stretchr's assertion library that makes spotting differences in equality much
-easier. It uses [repr](https://github.com/alecthomas/repr) and
-[diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch) to display structural differences
-in colour.
+This is a fork of stretchr's assertion library that does two things:
+
+1. It makes spotting differences in equality much easier. It uses [repr](https://github.com/alecthomas/repr) and
+    [diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch) to display structural differences
+    in colour.
+2. Aborts tests on first assertion failure (the same behaviour as `stretchr/testify/require`).
 
 ## Example
 
@@ -15,22 +17,23 @@ type Person struct {
   Age  int
 }
 
+// Use github.com/alecthomas/assert
 func TestDiff(t *testing.T) {
   expected := []*Person{{"Alec", 20}, {"Bob", 21}, {"Sally", 22}}
   actual := []*Person{{"Alex", 20}, {"Bob", 22}, {"Sally", 22}}
   assert.Equal(t, expected, actual)
 }
+
+// Use github.com/stretchr/testify/require
+func TestTestifyDiff(t *testing.T) {
+  expected := []*Person{{"Alec", 20}, {"Bob", 21}, {"Sally", 22}}
+  actual := []*Person{{"Alex", 20}, {"Bob", 22}, {"Sally", 22}}
+  require.Equal(t, expected, actual)
+}
 ```
 
-This is what testify/assert will display:
+The following output illustrates the problems this solves. Firstly, it shows
+nested structures correctly, and secondly it highlights the differences between
+actual and expected text.
 
-<pre>
---- FAIL: TestDiff (0.00s)
-        Error Trace:    example_test.go:18
-        Error:    Not equal: []*example.Person{(*example.Person)(0xc8200c27c0), (*example.Person)(0xc8200c27e0), (*example.Person)(0xc8200c2800)} (expected)
-                          != []*example.Person{(*example.Person)(0xc8200c2840), (*example.Person)(0xc8200c2860), (*example.Person)(0xc8200c2880)} (actual)
-</pre>
-
-And this is what alecthomas/assert will display:
-
-<img src="./_example/diff.png">
+<img style="overflow-x: auto;" src="./_example/diff.png">
