@@ -12,8 +12,8 @@ import (
 func DiffValues(a, b interface{}) string {
 	printer := colour.String()
 	diff := diffmatchpatch.New()
-	at := repr.Repr(a)
-	bt := repr.Repr(b)
+	at := repr.String(a, repr.OmitEmpty())
+	bt := repr.String(b, repr.OmitEmpty())
 	diffs := diff.DiffMain(at, bt, true)
 	for _, d := range diffs {
 		switch d.Type {
@@ -34,8 +34,8 @@ func DiffValues(a, b interface{}) string {
 
 func DiffValuesDefault(a, b interface{}) string {
 	diff := diffmatchpatch.New()
-	at := repr.Repr(a)
-	bt := repr.Repr(b)
+	at := repr.String(a)
+	bt := repr.String(b)
 	diffs := diff.DiffMain(at, bt, true)
 	w := bytes.NewBuffer(nil)
 	for _, d := range diffs {
