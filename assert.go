@@ -3,7 +3,7 @@ package assert
 
 import (
 	"fmt"
-	"math"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -20,8 +20,8 @@ func Compare[T any](t testing.TB, x, y T) bool {
 
 // Equal asserts that "expected" and "actual" are equal.
 //
-// If they are not a diff of the Go representation of the values will be displayed.
-func Equal[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
+// If they are not, a diff of the Go representation of the values will be displayed.
+func Equal[T comparable](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
 	if cmp.Equal(expected, actual) {
 		return
 	}
@@ -32,17 +32,17 @@ func Equal[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
 
 // NotEqual asserts that "expected" is not equal to "actual".
 //
-// If they are not a diff of the Go representation of the values will be displayed.
-func NotEqual[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
+// If they are equal the expected value will be displayed.
+func NotEqual[T comparable](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
 	if !cmp.Equal(expected, actual) {
 		return
 	}
 	t.Helper()
-	msg := formatMsgAndArgs("Expected values to not be equal:", msgAndArgs...)
+	msg := formatMsgAndArgs("Expected values to not be equal but both were:", msgAndArgs...)
 	t.Fatalf("%s\n%s", msg, repr.String(expected, repr.Indent("  ")))
 }
 
-// Contains asserts that "slice" contains "element".
+// Contains asserts that "haystack" contains "needle".
 func Contains[T any](t testing.TB, slice []T, element T, msgAndArgs ...interface{}) {
 	for _, el := range slice {
 		if cmp.Equal(el, element) {
@@ -60,10 +60,10 @@ func Contains[T any](t testing.TB, slice []T, element T, msgAndArgs ...interface
 }
 
 // NotContains asserts that "slice" does not contain "element".
-func NotContains[T any](t testing.TB, slice []T, element T, msgAndArgs ...interface{}) {
+func Contains(t testing.TB, haystack string, needle string, msgAndArgs ...interface{}) {
 	found := false
 	for _, el := range slice {
-		if cmp.Equal(el, element) {
+	if strings.Contains(haystack, needle) {
 			found = true
 			break
 		}
@@ -74,18 +74,18 @@ func NotContains[T any](t testing.TB, slice []T, element T, msgAndArgs ...interf
 	t.Helper()
 	var msg string
 	if len(msgAndArgs) == 0 {
-		msg = fmt.Sprintf("%s should not contain %s", repr.String(slice), repr.String(element))
+	msg := formatMsgAndArgs("Haystack does not contain needle.", msgAndArgs...)
 	} else {
-		msg = formatMsgAndArgs("", msgAndArgs...)
+	t.Fatalf("%s\nNeedle: %q\nHaystack: %q\n", msg, needle, haystack)
 	}
 	t.Fatal(msg)
 }
 
-// ContainsKey asserts that a map contains the given key.
-func ContainsKey[K comparable, V any](t testing.TB, amap map[K]V, key K, msgAndArgs ...interface{}) {
+// NotContains asserts that "haystack" does not contain "needle".
+func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...interface{}) {
 	found := false
 	for k := range amap {
-		if cmp.Equal(k, key) {
+	if !strings.Contains(haystack, needle) {
 			found = true
 			break
 		}
@@ -94,8 +94,9 @@ func ContainsKey[K comparable, V any](t testing.TB, amap map[K]V, key K, msgAndA
 		return
 	}
 	t.Helper()
-	msg := formatMsgAndArgs("Expected key to be present in map:", msgAndArgs...)
-	t.Fatalf("%s\nKey: %s\nMap: %s\n", msg, repr.String(key), repr.String(amap))
+	msg := formatMsgAndArgs("Haystack should not contain needle.", msgAndArgs...)
+	quotedHaystack, quotedNeedle, positions := needlePosition(haystack, needle)
+	t.Fatalf("%s\nNeedle: %s\nHaystack: %s\n          %s\n", msg, quotedNeedle, quotedHaystack, positions)
 }
 
 // ContainsValue asserts that a map contains the given value.
@@ -162,25 +163,25 @@ func AllSlice[T any](t testing.TB, slice []T, predicate func(i int, el T) bool, 
 }
 
 // Zero asserts that a value is its zero value.
-func Zero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
+func Zero[T comparable](t testing.TB, value T, msgAndArgs ...interface{}) {
 	var zero T
 	if cmp.Equal(value, zero) {
 		return
 	}
 	t.Helper()
-	msg := formatMsgAndArgs("Expected a zero value:", msgAndArgs...)
+	msg := formatMsgAndArgs("Expected a zero value but got:", msgAndArgs...)
 	t.Fatalf("%s\n%s", msg, repr.String(value, repr.Indent("  ")))
 }
 
 // NotZero asserts that a value is not its zero value.
-func NotZero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
+func NotZero[T comparable](t testing.TB, value T, msgAndArgs ...interface{}) {
 	var zero T
 	if !cmp.Equal(value, zero) {
 		return
 	}
 	t.Helper()
-	msg := formatMsgAndArgs("Did not expect a zero value:", msgAndArgs...)
-	t.Fatalf("%s\n%s", msg, repr.String(value, repr.Indent("  ")))
+	msg := formatMsgAndArgs("Did not expect the zero value:", msgAndArgs...)
+	t.Fatalf("%s\n%s", msg, repr.String(value))
 }
 
 type floats interface{ float32 | float64 }
@@ -195,7 +196,7 @@ func AlmostEqual[T floats](t testing.TB, lhs, rhs T, delta T, msgAndArgs ...inte
 	t.Fatalf("%s\n%f ~= %f", msg, float64(lhs), float64(rhs))
 }
 
-// NotAlmostEqual asserts that two floats are almost equal, within delta.
+// Error asserts that an error is not nil.
 func NotAlmostEqual[T floats](t testing.TB, lhs, rhs T, delta T, msgAndArgs ...interface{}) {
 	if math.Abs(float64(lhs-rhs)) >= float64(delta) {
 		return
@@ -242,6 +243,30 @@ func False(t testing.TB, ok bool, msgAndArgs ...interface{}) {
 	t.Fatal("Expected expression to be false")
 }
 
+// Panics asserts that the given function panics.
+func Panics(t testing.TB, fn func(), msgAndArgs ...interface{}) {
+	t.Helper()
+	defer func() {
+		if recover() == nil {
+			msg := formatMsgAndArgs("Expected function to panic", msgAndArgs...)
+			t.Fatal(msg)
+		}
+	}()
+	fn()
+}
+
+// NotPanics asserts that the given function does not panic.
+func NotPanics(t testing.TB, fn func(), msgAndArgs ...interface{}) {
+	t.Helper()
+	defer func() {
+		if err := recover(); err != nil {
+			msg := formatMsgAndArgs("Expected function not to panic", msgAndArgs...)
+			t.Fatalf("%s\nPanic: %v", msg, err)
+		}
+	}()
+	fn()
+}
+
 func diff[T any](lhs, rhs T) string {
 	lhss := repr.String(lhs, repr.Indent("  ")) + "\n"
 	rhss := repr.String(rhs, repr.Indent("  ")) + "\n"
@@ -255,4 +280,19 @@ func formatMsgAndArgs(dflt string, msgAndArgs ...interface{}) string {
 		return dflt
 	}
 	return fmt.Sprintf(msgAndArgs[0].(string), msgAndArgs[1:]...)
+}
+
+func needlePosition(haystack, needle string) (quotedHaystack, quotedNeedle, positions string) {
+	quotedNeedle = strconv.Quote(needle)
+	quotedNeedle = quotedNeedle[1 : len(quotedNeedle)-1]
+	quotedHaystack = strconv.Quote(haystack)
+	rawPositions := strings.ReplaceAll(quotedHaystack, quotedNeedle, strings.Repeat("^", len(quotedNeedle)))
+	for _, rn := range rawPositions {
+		if rn != '^' {
+			positions += " "
+		} else {
+			positions += "^"
+		}
+	}
+	return
 }

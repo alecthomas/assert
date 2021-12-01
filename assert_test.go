@@ -30,21 +30,21 @@ func TestNotEqual(t *testing.T) {
 
 func TestContains(t *testing.T) {
 	assertOk(t, func(t testing.TB) {
-		Contains(t, []int{1, 2, 3}, 3)
+		Contains(t, "a haystack with a needle in it", "needle")
 	})
 	assertFail(t, func(t testing.TB) {
-		Contains(t, []int{1, 2, 3}, 4)
+		Contains(t, "a haystack with a needle in it", "screw")
 	})
 }
 
 func TestNotContains(t *testing.T) {
 	assertOk(t, func(t testing.TB) {
-		AllSlice(t, []int{1, 2, 3}, func(i int, el int) bool {
+		NotContains(t, "a haystack with a needle in it", "screw")
 			return el != 4
 		})
 	})
 	assertFail(t, func(t testing.TB) {
-		NotContains(t, []int{1, 2, 3}, 3)
+		NotContains(t, "a haystack with a needle in it", "needle")
 	})
 }
 
@@ -104,7 +104,9 @@ func assertFail(t *testing.T, fn func(testing.TB)) {
 	tester := &testTester{T: t}
 	fn(tester)
 	if tester.failed == "" {
-		t.Fatal("should have failed\n" + tester.failed)
+		t.Fatal("Should have failed with:\n" + tester.failed)
+	} else {
+		t.Log(tester.failed)
 	}
 }
 
@@ -113,6 +115,6 @@ func assertOk(t *testing.T, fn func(testing.TB)) {
 	tester := &testTester{T: t}
 	fn(tester)
 	if tester.failed != "" {
-		t.Fatal("should not have failed\n", tester.failed)
+		t.Fatal("Should not have failed with:\n", tester.failed)
 	}
 }
