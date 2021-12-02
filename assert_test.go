@@ -40,8 +40,6 @@ func TestContains(t *testing.T) {
 func TestNotContains(t *testing.T) {
 	assertOk(t, func(t testing.TB) {
 		NotContains(t, "a haystack with a needle in it", "screw")
-			return el != 4
-		})
 	})
 	assertFail(t, func(t testing.TB) {
 		NotContains(t, "a haystack with a needle in it", "needle")
@@ -65,24 +63,6 @@ func TestNotZero(t *testing.T) {
 	assertFail(t, func(t testing.TB) {
 		zero := Data{}
 		NotZero(t, zero)
-	})
-}
-
-func TestAlmostEqual(t *testing.T) {
-	assertOk(t, func(t testing.TB) {
-		AlmostEqual(t, 1.2, 1.25, 0.06)
-	})
-	assertFail(t, func(t testing.TB) {
-		AlmostEqual(t, 1.2, 1.25, 0.01)
-	})
-}
-
-func TestContainsKey(t *testing.T) {
-	assertOk(t, func(t testing.TB) {
-		ContainsKey(t, map[string]int{"a": 1, "b": 2}, "b")
-	})
-	assertFail(t, func(t testing.TB) {
-		ContainsKey(t, map[string]int{"a": 1, "b": 2}, "c")
 	})
 }
 
