@@ -1,4 +1,4 @@
-# A simple assertion library using Go generics
+# A simple assertion library using Go generics [![CI](https://github.com/alecthomas/assert/actions/workflows/ci.yml/badge.svg)](https://github.com/alecthomas/assert/actions/workflows/ci.yml)
 
 This library is inspired by testify/require, but with a significantly reduced
 API surface based on empirical use of that package.
