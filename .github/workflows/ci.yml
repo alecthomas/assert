@@ -12,8 +12,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Init Hermit
-        run: |
-          ./bin/hermit env -r >> $GITHUB_ENV
-          hermit install -d
+        run: ./bin/hermit env -r >> $GITHUB_ENV
+      - name: Install Packages
+        run: hermit install -d
       - name: Test
         run: go test -v ./...
