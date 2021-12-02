@@ -9,6 +9,12 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache
+          key: ${{ runner.os }}
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Init Hermit
