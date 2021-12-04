@@ -21,7 +21,7 @@ func Compare[T any](t testing.TB, x, y T) bool {
 // Equal asserts that "expected" and "actual" are equal.
 //
 // If they are not, a diff of the Go representation of the values will be displayed.
-func Equal[T comparable](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
+func Equal[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
 	if cmp.Equal(expected, actual) {
 		return
 	}
@@ -33,7 +33,7 @@ func Equal[T comparable](t testing.TB, expected, actual T, msgAndArgs ...interfa
 // NotEqual asserts that "expected" is not equal to "actual".
 //
 // If they are equal the expected value will be displayed.
-func NotEqual[T comparable](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
+func NotEqual[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
 	if !cmp.Equal(expected, actual) {
 		return
 	}
@@ -64,7 +64,7 @@ func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...int
 }
 
 // Zero asserts that a value is its zero value.
-func Zero[T comparable](t testing.TB, value T, msgAndArgs ...interface{}) {
+func Zero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 	var zero T
 	if cmp.Equal(value, zero) {
 		return
@@ -75,7 +75,7 @@ func Zero[T comparable](t testing.TB, value T, msgAndArgs ...interface{}) {
 }
 
 // NotZero asserts that a value is not its zero value.
-func NotZero[T comparable](t testing.TB, value T, msgAndArgs ...interface{}) {
+func NotZero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 	var zero T
 	if !cmp.Equal(value, zero) {
 		return
