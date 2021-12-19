@@ -15,7 +15,7 @@ func TestEqual(t *testing.T) {
 		Equal(t, Data{"expected", 1234}, Data{"expected", 1234})
 	})
 	assertFail(t, func(t testing.TB) {
-		Equal(t, Data{"expected", 1234}, Data{"actual", 1234})
+		Equal(t, Data{"expected\ntext", 1234}, Data{"actual\ntext", 1234})
 	})
 }
 
