@@ -84,24 +84,29 @@ These are the usage counts for all testify functions, normalised to the base
 
 The decision for each function was:
 
+### Keep
+
 - `Error(t, err)` -> frequently used, keep
 - `Equal(t, expected, actual)` -> frequently used, keep but make type safe
 - `True(t, expr)` -> frequently used, keep
 - `False(t, expr)` -> frequently used, keep
-- `Nil(t, value)` -> cannot be implemented as a single function with generics, replace with `Equal(t, value, nil)`
 - `Empty(t, thing)` -> `require.Equal(t, len(thing), 0)`
 - `Contains(t, haystack string, needle string)` - the only variant used in our codebase, keep as concrete type
-- `Contains(t, haystack []T, needle T)` - very little use, replace with
-- `Contains(t, haystack map[K]V, needle K)` - very little use, drop
-- `Len(t, v, n)` -> cannot be implemented as a single function with generics`Equal(t, len(v), n)`
-- `EqualValues()` - `Equal(t, TYPE(a), TYPE(b))`
-- `EqualError(t, a, b)` -> `True(t, errors.Is(a, b))`
 - `Zero(t, value)` -> make type safe, keep
-- `Fail()` -> `t.Fatal()`
-- `ElementsMatch(t, a, b)` - use [peterrk/slices](https://github.com/peterrk/slices) or stdlib sort support once it lands.
 - `Panics(t, f)` -> useful, keep
+
+### Not keeping, replace with
+
+- `Nil(t, value)` -> cannot be implemented as a single function with generics, replace with `Equal(t, value, nil)`
+- `ElementsMatch(t, a, b)` - use [peterrk/slices](https://github.com/peterrk/slices) or stdlib sort support once it lands.
 - `IsType(t, a, b)` -> `require.Equal(t, reflect.TypeOf(a).String(), reflect.TypeOf(b).String())`
 - `FileExists()` -> very little use, drop
 - `JSONEq()` -> very little use, drop
 - `PanicsWithValue()` -> very little use, drop
 - `Eventually()` -> very little use, drop
+- `Contains(t, haystack []T, needle T)` - very little use, replace with
+- `Contains(t, haystack map[K]V, needle K)` - very little use, drop
+- `Len(t, v, n)` -> cannot be implemented as a single function with generics`Equal(t, len(v), n)`
+- `EqualValues()` - `Equal(t, TYPE(a), TYPE(b))`
+- `EqualError(t, a, b)` -> `True(t, errors.Is(a, b))`
+- `Fail()` -> `t.Fatal()`
