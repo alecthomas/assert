@@ -2,27 +2,48 @@
 package assert
 
 import (
+	"bytes"
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
 
 	"github.com/alecthomas/repr"
-	"github.com/google/go-cmp/cmp"
 	"github.com/hexops/gotextdiff"
 	"github.com/hexops/gotextdiff/myers"
 )
 
+func objectsAreEqual(expected, actual interface{}) bool {
+	if expected == nil || actual == nil {
+		return expected == actual
+	}
+
+	exp, ok := expected.([]byte)
+	if !ok {
+		return reflect.DeepEqual(expected, actual)
+	}
+
+	act, ok := actual.([]byte)
+	if !ok {
+		return false
+	}
+	if exp == nil || act == nil {
+		return exp == nil && act == nil
+	}
+	return bytes.Equal(exp, act)
+}
+
 // Compare two values for equality and return true or false.
 func Compare[T any](t testing.TB, x, y T) bool {
-	return cmp.Equal(x, y)
+	return objectsAreEqual(x, y)
 }
 
 // Equal asserts that "expected" and "actual" are equal.
 //
 // If they are not, a diff of the Go representation of the values will be displayed.
 func Equal[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
-	if cmp.Equal(expected, actual) {
+	if objectsAreEqual(expected, actual) {
 		return
 	}
 	t.Helper()
@@ -34,7 +55,7 @@ func Equal[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
 //
 // If they are equal the expected value will be displayed.
 func NotEqual[T any](t testing.TB, expected, actual T, msgAndArgs ...interface{}) {
-	if !cmp.Equal(expected, actual) {
+	if !objectsAreEqual(expected, actual) {
 		return
 	}
 	t.Helper()
@@ -66,7 +87,7 @@ func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...int
 // Zero asserts that a value is its zero value.
 func Zero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 	var zero T
-	if cmp.Equal(value, zero) {
+	if objectsAreEqual(value, zero) {
 		return
 	}
 	t.Helper()
@@ -77,7 +98,7 @@ func Zero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 // NotZero asserts that a value is not its zero value.
 func NotZero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 	var zero T
-	if !cmp.Equal(value, zero) {
+	if !objectsAreEqual(value, zero) {
 		return
 	}
 	t.Helper()
