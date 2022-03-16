@@ -46,6 +46,15 @@ func TestNotContains(t *testing.T) {
 	})
 }
 
+func TestEqualError(t *testing.T) {
+	assertOk(t, func(t testing.TB) {
+		EqualError(t, fmt.Errorf("hello"), "hello")
+	})
+	assertFail(t, func(t testing.TB) {
+		EqualError(t, fmt.Errorf("hello"), "goodbye")
+	})
+}
+
 func TestZero(t *testing.T) {
 	assertOk(t, func(t testing.TB) {
 		Zero(t, Data{})

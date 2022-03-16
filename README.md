@@ -30,6 +30,9 @@ func Contains(t testing.TB, haystack string, needle string, msgAndArgs ...interf
 // NotContains asserts that "haystack" does not contain "needle".
 func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...interface{})
 
+// EqualError asserts that an error is non-nil and that its message is what is expected.
+func EqualError(t testing.TB, err error, errString string, msgAndArgs...interface{})
+
 // Error asserts that an error is not nil.
 func Error(t testing.TB, err error, msgAndArgs ...interface{})
 
@@ -94,10 +97,11 @@ The decision for each function was:
 - `Contains(t, haystack string, needle string)` - the only variant used in our codebase, keep as concrete type
 - `Zero(t, value)` -> make type safe, keep
 - `Panics(t, f)` -> useful, keep
+- `EqualError(t, a, b)` -> useful, keep
+- `Nil(t, value)` -> frequently used, keep
 
 ### Not keeping, replace with
 
-- `Nil(t, value)` -> cannot be implemented as a single function with generics, replace with `Equal(t, value, nil)`
 - `ElementsMatch(t, a, b)` - use [peterrk/slices](https://github.com/peterrk/slices) or stdlib sort support once it lands.
 - `IsType(t, a, b)` -> `require.Equal(t, reflect.TypeOf(a).String(), reflect.TypeOf(b).String())`
 - `FileExists()` -> very little use, drop
@@ -108,5 +112,4 @@ The decision for each function was:
 - `Contains(t, haystack map[K]V, needle K)` - very little use, drop
 - `Len(t, v, n)` -> cannot be implemented as a single function with generics`Equal(t, len(v), n)`
 - `EqualValues()` - `Equal(t, TYPE(a), TYPE(b))`
-- `EqualError(t, a, b)` -> `True(t, errors.Is(a, b))`
 - `Fail()` -> `t.Fatal()`

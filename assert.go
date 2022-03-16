@@ -106,6 +106,23 @@ func NotZero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 	t.Fatalf("%s\n%s", msg, repr.String(value))
 }
 
+// func Nil[T any](t testing.TB, value *T, msgAndArgs ...interface{}) {
+// 	var p *T
+// 	Equal(t, p, value, msgAndArgs...)
+// }
+
+// EqualError asserts that an error is non-nil and that its message is what is expected.
+func EqualError(t testing.TB, err error, errString string, msgAndArgs ...interface{}) {
+	t.Helper()
+	if err == nil {
+		t.Fatal(formatMsgAndArgs("Expected an error", msgAndArgs...))
+	}
+	if err.Error() != errString {
+		msg := formatMsgAndArgs("Error message not as expected:", msgAndArgs...)
+		t.Fatalf("%s\n%s", msg, diff(errString, err.Error()))
+	}
+}
+
 // Error asserts that an error is not nil.
 func Error(t testing.TB, err error, msgAndArgs ...interface{}) {
 	if err != nil {
