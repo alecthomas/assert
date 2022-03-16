@@ -50,6 +50,9 @@ func TestEqualError(t *testing.T) {
 	assertOk(t, func(t testing.TB) {
 		EqualError(t, fmt.Errorf("hello"), "hello")
 	})
+	assertOk(t, func(t testing.TB) {
+		EqualError(t, nil, "")
+	})
 	assertFail(t, func(t testing.TB) {
 		EqualError(t, fmt.Errorf("hello"), "goodbye")
 	})
@@ -59,8 +62,16 @@ func TestZero(t *testing.T) {
 	assertOk(t, func(t testing.TB) {
 		Zero(t, Data{})
 	})
+	assertOk(t, func(t testing.TB) {
+		var slice []int
+		Zero(t, slice)
+	})
 	assertFail(t, func(t testing.TB) {
 		Zero(t, Data{Str: "str"})
+	})
+	assertFail(t, func(t testing.TB) {
+		slice := []int{1, 2, 3}
+		Zero(t, slice)
 	})
 }
 
@@ -88,7 +99,7 @@ func (t *testTester) Fatal(args ...interface{}) {
 	t.failed = fmt.Sprint(args...)
 }
 
-func assertFail(t *testing.T, fn func(testing.TB)) {
+func assertFail(t *testing.T, fn func(t testing.TB)) {
 	t.Helper()
 	tester := &testTester{T: t}
 	fn(tester)
@@ -99,7 +110,7 @@ func assertFail(t *testing.T, fn func(testing.TB)) {
 	}
 }
 
-func assertOk(t *testing.T, fn func(testing.TB)) {
+func assertOk(t *testing.T, fn func(t testing.TB)) {
 	t.Helper()
 	tester := &testTester{T: t}
 	fn(tester)
