@@ -30,7 +30,8 @@ func Contains(t testing.TB, haystack string, needle string, msgAndArgs ...interf
 // NotContains asserts that "haystack" does not contain "needle".
 func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...interface{})
 
-// EqualError asserts that an error is non-nil and that its message is what is expected.
+// EqualError asserts that either an error is non-nil and that its message is what is expected,
+// or that error is nil if the expected message is empty.
 func EqualError(t testing.TB, err error, errString string, msgAndArgs...interface{})
 
 // Error asserts that an error is not nil.
