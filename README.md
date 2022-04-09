@@ -7,6 +7,19 @@
 This library is inspired by testify/require, but with a significantly reduced
 API surface based on empirical use of that package.
 
+It also provides much nicer diff output, eg.
+
+```
+=== RUN   TestFail
+    assert_test.go:14: Expected values to be equal:
+         assert.Data{
+        -  Str: "foo",
+        +  Str: "far",
+           Num: 10,
+         }
+--- FAIL: TestFail (0.00s)
+```
+
 ## API
 
 This library has the following API. For all functions, `msgAndArgs` is used to
