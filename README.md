@@ -1,4 +1,8 @@
-# A simple assertion library using Go generics [![CI](https://github.com/alecthomas/assert/actions/workflows/ci.yml/badge.svg)](https://github.com/alecthomas/assert/actions/workflows/ci.yml)
+# A simple assertion library using Go generics
+
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/alecthomas/assert/v2)](https://pkg.go.dev/github.com/alecthomas/assert/v2) [![CI](https://github.com/alecthomas/assert/actions/workflows/ci.yml/badge.svg)](https://github.com/alecthomas/assert/actions/workflows/ci.yml) 
+[![Go Report Card](https://goreportcard.com/badge/github.com/alecthomas/assert/v2)](https://goreportcard.com/report/github.com/alecthomas/assert/v2) [![Slack chat](https://img.shields.io/static/v1?logo=slack&style=flat&label=slack&color=green&message=gophers)](https://gophers.slack.com/messages/CN9DS8YF3)
+
 
 This library is inspired by testify/require, but with a significantly reduced
 API surface based on empirical use of that package.
