@@ -9,7 +9,8 @@ API surface based on empirical use of that package.
 
 ## API
 
-This library has the following API:
+This library has the following API. For all functions, `msgAndArgs` is used to
+format error messages using the `fmt` package.
 
 ```go
 // Equal asserts that "expected" and "actual" are equal using google/go-cmp.
@@ -105,7 +106,7 @@ The decision for each function was:
 - `EqualError(t, a, b)` -> useful, keep
 - `Nil(t, value)` -> frequently used, keep
 
-### Not keeping, replace with
+### Not keeping, replace with ...
 
 - `ElementsMatch(t, a, b)` - use [peterrk/slices](https://github.com/peterrk/slices) or stdlib sort support once it lands.
 - `IsType(t, a, b)` -> `require.Equal(t, reflect.TypeOf(a).String(), reflect.TypeOf(b).String())`
