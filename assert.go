@@ -103,7 +103,10 @@ func Zero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 func NotZero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 	var zero T
 	if !objectsAreEqual(value, zero) {
-		return
+		val := reflect.ValueOf(value)
+		if !((val.Kind() == reflect.Slice || val.Kind() == reflect.Map || val.Kind() == reflect.Array) && val.Len() == 0) {
+			return
+		}
 	}
 	t.Helper()
 	msg := formatMsgAndArgs("Did not expect the zero value:", msgAndArgs...)

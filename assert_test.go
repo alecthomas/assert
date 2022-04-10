@@ -88,6 +88,18 @@ func TestNotZero(t *testing.T) {
 		zero := Data{}
 		NotZero(t, zero)
 	})
+	assertFail(t, "NilSlice", func(t testing.TB) {
+		var slice []int
+		NotZero(t, slice)
+	})
+	assertFail(t, "ZeroLenSlice", func(t testing.TB) {
+		slice := []int{}
+		NotZero(t, slice)
+	})
+	assertOk(t, "Slice", func(t testing.TB) {
+		slice := []int{1, 2, 3}
+		NotZero(t, slice)
+	})
 }
 
 type testTester struct {
