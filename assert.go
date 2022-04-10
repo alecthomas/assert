@@ -90,6 +90,10 @@ func Zero[T any](t testing.TB, value T, msgAndArgs ...interface{}) {
 	if objectsAreEqual(value, zero) {
 		return
 	}
+	val := reflect.ValueOf(value)
+	if (val.Kind() == reflect.Slice || val.Kind() == reflect.Map || val.Kind() == reflect.Array) && val.Len() == 0 {
+		return
+	}
 	t.Helper()
 	msg := formatMsgAndArgs("Expected a zero value but got:", msgAndArgs...)
 	t.Fatalf("%s\n%s", msg, repr.String(value, repr.Indent("  ")))
