@@ -154,7 +154,7 @@ func True(t testing.TB, ok bool, msgAndArgs ...interface{}) {
 		return
 	}
 	t.Helper()
-	t.Fatal("Expected expression to be true")
+	t.Fatal(formatMsgAndArgs("Expected expression to be true", msgAndArgs...))
 }
 
 // False asserts that an expression is false.
@@ -163,7 +163,7 @@ func False(t testing.TB, ok bool, msgAndArgs ...interface{}) {
 		return
 	}
 	t.Helper()
-	t.Fatal("Expected expression to be false")
+	t.Fatal(formatMsgAndArgs("Expected expression to be false", msgAndArgs...))
 }
 
 // Panics asserts that the given function panics.
