@@ -22,6 +22,12 @@ It also provides much nicer diff output, eg.
 
 ## API
 
+Import then use as `assert`:
+
+```go
+import "github.com/alecthomas/assert/v2"
+```
+
 This library has the following API. For all functions, `msgAndArgs` is used to
 format error messages using the `fmt` package.
 
