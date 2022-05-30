@@ -191,8 +191,15 @@ func NotPanics(t testing.TB, fn func(), msgAndArgs ...interface{}) {
 }
 
 func diff[T any](lhs, rhs T) string {
-	lhss := repr.String(lhs, repr.Indent("  ")) + "\n"
-	rhss := repr.String(rhs, repr.Indent("  ")) + "\n"
+	var lhss, rhss string
+	// Special case strings so we get nice diffs.
+	if l, ok := any(lhs).(string); ok {
+		lhss = l
+		rhss = any(rhs).(string)
+	} else {
+		lhss = repr.String(lhs, repr.Indent("  ")) + "\n"
+		rhss = repr.String(rhs, repr.Indent("  ")) + "\n"
+	}
 	edits := myers.ComputeEdits("a.txt", lhss, rhss)
 	lines := strings.Split(fmt.Sprint(gotextdiff.ToUnified("expected.txt", "actual.txt", lhss, edits)), "\n")
 	if len(lines) < 3 {

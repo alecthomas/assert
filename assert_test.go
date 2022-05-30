@@ -19,6 +19,12 @@ func TestEqual(t *testing.T) {
 	})
 }
 
+func TestEqualStrings(t *testing.T) {
+	assertFail(t, "IdenticalStrings", func(t testing.TB) {
+		Equal(t, "hello\nworld", "goodbye\nworld")
+	})
+}
+
 func TestNotEqual(t *testing.T) {
 	assertOk(t, "DifferentFieldValue", func(t testing.TB) {
 		NotEqual(t, Data{"expected", 1234}, Data{"expected", 1235})
