@@ -43,6 +43,15 @@ func TestContains(t *testing.T) {
 	})
 }
 
+func TestContainsItem(t *testing.T) {
+	assertOk(t, "Found", func(t testing.TB) {
+		ContainsItem(t, []string{"hello", "world"}, "hello")
+	})
+	assertFail(t, "NotFound", func(t testing.TB) {
+		ContainsItem(t, []string{"hello", "world"}, "goodbye")
+	})
+}
+
 func TestNotContains(t *testing.T) {
 	assertOk(t, "NotFound", func(t testing.TB) {
 		NotContains(t, "a haystack with a needle in it", "screw")
