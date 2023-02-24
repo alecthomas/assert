@@ -19,19 +19,14 @@ func objectsAreEqual(expected, actual interface{}) bool {
 		return expected == actual
 	}
 
-	exp, ok := expected.([]byte)
-	if !ok {
-		return reflect.DeepEqual(expected, actual)
+	exp, eok := expected.([]byte)
+	act, aok := actual.([]byte)
+
+	if eok && aok {
+		return bytes.Equal(exp, act)
 	}
 
-	act, ok := actual.([]byte)
-	if !ok {
-		return false
-	}
-	if exp == nil || act == nil {
-		return exp == nil && act == nil
-	}
-	return bytes.Equal(exp, act)
+	return reflect.DeepEqual(expected, actual)
 }
 
 // Compare two values for equality and return true or false.

@@ -14,8 +14,23 @@ func TestEqual(t *testing.T) {
 	assertOk(t, "IdenticalStruct", func(t testing.TB) {
 		Equal(t, Data{"expected", 1234}, Data{"expected", 1234})
 	})
+	assertOk(t, "Zero length byte arrays", func(t testing.TB) {
+		Equal(t, []byte(""), []byte(nil))
+	})
+	assertOk(t, "Identical byte arrays", func(t testing.TB) {
+		Equal(t, []byte{4, 2}, []byte{4, 2})
+	})
+	assertOk(t, "Identical numbers", func(t testing.TB) {
+		Equal(t, 42, 42)
+	})
 	assertFail(t, "DifferentStruct", func(t testing.TB) {
 		Equal(t, Data{"expected\ntext", 1234}, Data{"actual\ntext", 1234})
+	})
+	assertFail(t, "Different bytes arrays", func(t testing.TB) {
+		Equal(t, []byte{2, 4}, []byte{4, 2})
+	})
+	assertFail(t, "Different numbers", func(t testing.TB) {
+		Equal(t, 42, 43)
 	})
 }
 
