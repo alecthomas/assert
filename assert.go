@@ -173,6 +173,20 @@ func Panics(t testing.TB, fn func(), msgAndArgs ...interface{}) {
 	fn()
 }
 
+// PanicsWithError asserts that the given function panics with the given error.
+func PanicsWithError(tb testing.TB, expected error, fn func(), msgAndArgs ...interface{}) {
+	tb.Helper()
+	defer func() {
+		if value, ok := recover().(error); ok {
+			Equal(tb, expected, value, msgAndArgs...)
+		} else {
+			msg := formatMsgAndArgs("Expected function to panic with error", msgAndArgs...)
+			tb.Fatal(msg)
+		}
+	}()
+	fn()
+}
+
 // NotPanics asserts that the given function does not panic.
 func NotPanics(t testing.TB, fn func(), msgAndArgs ...interface{}) {
 	t.Helper()

@@ -2,6 +2,7 @@ package assert
 
 import (
 	"fmt"
+	"os"
 	"testing"
 )
 
@@ -120,6 +121,22 @@ func TestNotZero(t *testing.T) {
 	assertOk(t, "Slice", func(t testing.TB) {
 		slice := []int{1, 2, 3}
 		NotZero(t, slice)
+	})
+}
+
+func TestPanicsWithError(t *testing.T) {
+	assertOk(t, "PanicsWithError", func(t testing.TB) {
+		PanicsWithError(t, os.ErrNotExist, func() {
+			panic(os.ErrNotExist)
+		})
+	})
+	assertFail(t, "PanicsWithWrongError", func(t testing.TB) {
+		PanicsWithError(t, os.ErrNotExist, func() {
+			panic(os.ErrExist)
+		})
+	})
+	assertFail(t, "DoesNotPanic", func(t testing.TB) {
+		PanicsWithError(t, os.ErrNotExist, func() {})
 	})
 }
 
