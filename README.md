@@ -64,6 +64,12 @@ func Error(t testing.TB, err error, msgAndArgs ...interface{})
 // NoError asserts that an error is nil.
 func NoError(t testing.TB, err error, msgAndArgs ...interface{})
 
+// IsError asserts than any error in "err"'s tree matches "target".
+func IsError(t testing.TB, err, target error, msgAndArgs ...interface{})
+
+// NotIsError asserts than no error in "err"'s tree matches "target".
+func NotIsError(t testing.TB, err, target error, msgAndArgs ...interface{})
+
 // Panics asserts that the given function panics.
 func Panics(t testing.TB, fn func(), msgAndArgs ...interface{})
 

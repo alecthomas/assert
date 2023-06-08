@@ -3,6 +3,7 @@ package assert
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -124,6 +125,24 @@ func EqualError(t testing.TB, err error, errString string, msgAndArgs ...interfa
 	}
 }
 
+// IsError asserts than any error in "err"'s tree matches "target".
+func IsError(t testing.TB, err, target error, msgAndArgs ...interface{}) {
+	if errors.Is(err, target) {
+		return
+	}
+	t.Helper()
+	t.Fatal(formatMsgAndArgs(fmt.Sprintf("Error tree %q should contain error %q", err, target), msgAndArgs...))
+}
+
+// NotIsError asserts than no error in "err"'s tree matches "target".
+func NotIsError(t testing.TB, err, target error, msgAndArgs ...interface{}) {
+	if !errors.Is(err, target) {
+		return
+	}
+	t.Helper()
+	t.Fatal(formatMsgAndArgs(fmt.Sprintf("Error tree %q should NOT contain error %q", err, target), msgAndArgs...))
+}
+
 // Error asserts that an error is not nil.
 func Error(t testing.TB, err error, msgAndArgs ...interface{}) {
 	if err != nil {
@@ -185,15 +204,15 @@ func NotPanics(t testing.TB, fn func(), msgAndArgs ...interface{}) {
 	fn()
 }
 
-func diff[T any](lhs, rhs T) string {
+func diff[T any](before, after T) string {
 	var lhss, rhss string
 	// Special case strings so we get nice diffs.
-	if l, ok := any(lhs).(string); ok {
+	if l, ok := any(before).(string); ok {
 		lhss = l
-		rhss = any(rhs).(string)
+		rhss = any(after).(string)
 	} else {
-		lhss = repr.String(lhs, repr.Indent("  ")) + "\n"
-		rhss = repr.String(rhs, repr.Indent("  ")) + "\n"
+		lhss = repr.String(before, repr.Indent("  ")) + "\n"
+		rhss = repr.String(after, repr.Indent("  ")) + "\n"
 	}
 	edits := myers.ComputeEdits("a.txt", lhss, rhss)
 	lines := strings.Split(fmt.Sprint(gotextdiff.ToUnified("expected.txt", "actual.txt", lhss, edits)), "\n")

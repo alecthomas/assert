@@ -2,6 +2,7 @@ package assert
 
 import (
 	"fmt"
+	"os"
 	"testing"
 )
 
@@ -120,6 +121,24 @@ func TestNotZero(t *testing.T) {
 	assertOk(t, "Slice", func(t testing.TB) {
 		slice := []int{1, 2, 3}
 		NotZero(t, slice)
+	})
+}
+
+func TestIsError(t *testing.T) {
+	assertOk(t, "SameError", func(t testing.TB) {
+		IsError(t, fmt.Errorf("os error: %w", os.ErrClosed), os.ErrClosed)
+	})
+	assertFail(t, "DifferentError", func(t testing.TB) {
+		IsError(t, fmt.Errorf("not an os error"), os.ErrClosed)
+	})
+}
+
+func TestNotIsError(t *testing.T) {
+	assertFail(t, "SameError", func(t testing.TB) {
+		NotIsError(t, fmt.Errorf("os error: %w", os.ErrClosed), os.ErrClosed)
+	})
+	assertOk(t, "DifferentError", func(t testing.TB) {
+		NotIsError(t, fmt.Errorf("not an os error"), os.ErrClosed)
 	})
 }
 

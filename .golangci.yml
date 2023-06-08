@@ -45,6 +45,13 @@ linters:
     - gomoddirectives
     - thelper
     - varnamelen
+    - depguard
+    - exhaustruct
+    - nonamedreturns
+    - varcheck
+    - structcheck
+    - deadcode
+    - nosnakecase
 
 linters-settings:
   govet:
