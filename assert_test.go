@@ -33,6 +33,9 @@ func TestEqual(t *testing.T) {
 	assertFail(t, "Different numbers", func(t testing.TB) {
 		Equal(t, 42, 43)
 	})
+	assertOk(t, "Exclude", func(t testing.TB) {
+		Equal(t, Data{Str: "expected", Num: 1234}, Data{Str: "expected"}, Exclude[int64]())
+	})
 }
 
 func TestEqualStrings(t *testing.T) {
@@ -47,6 +50,9 @@ func TestNotEqual(t *testing.T) {
 	})
 	assertFail(t, "SameValue", func(t testing.TB) {
 		NotEqual(t, Data{"expected", 1234}, Data{"expected", 1234})
+	})
+	assertFail(t, "Exclude", func(t testing.TB) {
+		NotEqual(t, Data{Str: "expected", Num: 1234}, Data{Str: "expected"}, Exclude[int64]())
 	})
 }
 
