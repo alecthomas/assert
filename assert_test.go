@@ -139,6 +139,12 @@ func TestIsError(t *testing.T) {
 	})
 }
 
+func TestInvalidFormatMsg(t *testing.T) {
+	Panics(t, func() {
+		NotZero(t, Data{}, 123)
+	})
+}
+
 func TestNotIsError(t *testing.T) {
 	assertFail(t, "SameError", func(t testing.TB) {
 		NotIsError(t, fmt.Errorf("os error: %w", os.ErrClosed), os.ErrClosed)

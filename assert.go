@@ -237,7 +237,11 @@ func formatMsgAndArgs(dflt string, msgAndArgs ...any) string {
 	if len(msgAndArgs) == 0 {
 		return dflt
 	}
-	return fmt.Sprintf(msgAndArgs[0].(string), msgAndArgs[1:]...)
+	format, ok := msgAndArgs[0].(string)
+	if !ok {
+		panic("message argument to assert function must be a fmt string")
+	}
+	return fmt.Sprintf(format, msgAndArgs[1:]...)
 }
 
 func needlePosition(haystack, needle string) (quotedHaystack, quotedNeedle, positions string) {
