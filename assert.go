@@ -25,6 +25,13 @@ func Exclude[T any]() CompareOption {
 	}
 }
 
+// OmitEmpty fields from comparison.
+func OmitEmpty() CompareOption {
+	return func() []repr.Option {
+		return []repr.Option{repr.OmitEmpty(true)}
+	}
+}
+
 // Compare two values for equality and return true or false.
 func Compare[T any](t testing.TB, x, y T, options ...CompareOption) bool {
 	return objectsAreEqual(x, y, options...)
