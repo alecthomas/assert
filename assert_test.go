@@ -86,6 +86,24 @@ func TestEqualError(t *testing.T) {
 	})
 }
 
+func TestError(t *testing.T) {
+	assertOk(t, "Error", func(t testing.TB) {
+		Error(t, fmt.Errorf("hello"))
+	})
+	assertFail(t, "Nil", func(t testing.TB) {
+		Error(t, nil)
+	})
+}
+
+func TestNoError(t *testing.T) {
+	assertOk(t, "Nil", func(t testing.TB) {
+		NoError(t, nil)
+	})
+	assertFail(t, "Error", func(t testing.TB) {
+		NoError(t, fmt.Errorf("hello"))
+	})
+}
+
 func TestZero(t *testing.T) {
 	assertOk(t, "Struct", func(t testing.TB) {
 		Zero(t, Data{})

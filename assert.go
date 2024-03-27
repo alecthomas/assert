@@ -148,7 +148,7 @@ func IsError(t testing.TB, err, target error, msgAndArgs ...any) {
 		return
 	}
 	t.Helper()
-	t.Fatal(formatMsgAndArgs(fmt.Sprintf("Error tree %q should contain error %q", err, target), msgAndArgs...))
+	t.Fatal(formatMsgAndArgs(fmt.Sprintf("Error tree %+v should contain error %q", err, target), msgAndArgs...))
 }
 
 // NotIsError asserts than no error in "err"'s tree matches "target".
@@ -157,7 +157,7 @@ func NotIsError(t testing.TB, err, target error, msgAndArgs ...any) {
 		return
 	}
 	t.Helper()
-	t.Fatal(formatMsgAndArgs(fmt.Sprintf("Error tree %q should NOT contain error %q", err, target), msgAndArgs...))
+	t.Fatal(formatMsgAndArgs(fmt.Sprintf("Error tree %+v should NOT contain error %q", err, target), msgAndArgs...))
 }
 
 // Error asserts that an error is not nil.
@@ -176,7 +176,7 @@ func NoError(t testing.TB, err error, msgAndArgs ...any) {
 	}
 	t.Helper()
 	msg := formatMsgAndArgs("Did not expect an error but got:", msgAndArgs...)
-	t.Fatalf("%s\n%s", msg, err)
+	t.Fatalf("%s\n%+v", msg, err)
 }
 
 // True asserts that an expression is true.
