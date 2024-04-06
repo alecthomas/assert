@@ -32,6 +32,13 @@ func OmitEmpty() CompareOption {
 	}
 }
 
+// IgnoreGoStringer ignores GoStringer implementations when comparing.
+func IgnoreGoStringer() CompareOption {
+	return func() []repr.Option {
+		return []repr.Option{repr.IgnoreGoStringer()}
+	}
+}
+
 // Compare two values for equality and return true or false.
 func Compare[T any](t testing.TB, x, y T, options ...CompareOption) bool {
 	return objectsAreEqual(x, y, options...)
