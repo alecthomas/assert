@@ -172,6 +172,10 @@ func TestNotIsError(t *testing.T) {
 	})
 }
 
+func TestDiff(t *testing.T) {
+	Equal(t, "-before\n+after\n", diff("before", "after"))
+}
+
 type testTester struct {
 	*testing.T
 	failed string

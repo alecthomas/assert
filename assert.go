@@ -232,8 +232,8 @@ func diff[T any](before, after T, compareOptions ...CompareOption) string {
 	var lhss, rhss string
 	// Special case strings so we get nice diffs.
 	if l, ok := any(before).(string); ok {
-		lhss = l
-		rhss = any(after).(string)
+		lhss = l + "\n"
+		rhss = any(after).(string) + "\n"
 	} else {
 		ropts := expandCompareOptions(compareOptions...)
 		lhss = repr.String(before, ropts...) + "\n"
