@@ -57,6 +57,26 @@ func extractCompareOptions(msgAndArgs ...any) ([]any, []CompareOption) {
 	return out, compareOptions
 }
 
+// HasPrefix asserts that the string s starts with prefix.
+func HasPrefix(t testing.TB, s, prefix string, msgAndArgs ...any) {
+	if strings.HasPrefix(s, prefix) {
+		return
+	}
+	t.Helper()
+	msg := formatMsgAndArgs("Expected string to have prefix:", msgAndArgs...)
+	t.Fatalf("%s\nPrefix: %q\nString: %q\n", msg, prefix, s)
+}
+
+// HasSuffix asserts that the string s ends with suffix.
+func HasSuffix(t testing.TB, s, suffix string, msgAndArgs ...any) {
+	if strings.HasSuffix(s, suffix) {
+		return
+	}
+	t.Helper()
+	msg := formatMsgAndArgs("Expected string to have suffix:", msgAndArgs...)
+	t.Fatalf("%s\nSuffix: %q\nString: %q\n", msg, suffix, s)
+}
+
 // Equal asserts that "expected" and "actual" are equal.
 //
 // If they are not, a diff of the Go representation of the values will be displayed.

@@ -176,6 +176,24 @@ func TestDiff(t *testing.T) {
 	Equal(t, "-before\n+after\n", diff("before", "after"))
 }
 
+func TestHasSuffix(t *testing.T) {
+	assertOk(t, "Suffix", func(t testing.TB) {
+		HasSuffix(t, "hello", "lo")
+	})
+	assertFail(t, "NoSuffix", func(t testing.TB) {
+		HasSuffix(t, "hello", "world")
+	})
+}
+
+func TestHasPrefix(t *testing.T) {
+	assertOk(t, "Prefix", func(t testing.TB) {
+		HasPrefix(t, "hello", "he")
+	})
+	assertFail(t, "NoPrefix", func(t testing.TB) {
+		HasPrefix(t, "hello", "world")
+	})
+}
+
 type testTester struct {
 	*testing.T
 	failed string
