@@ -173,7 +173,7 @@ func TestNotIsError(t *testing.T) {
 }
 
 func TestDiff(t *testing.T) {
-	Equal(t, "-before\n+after\n", diff("before", "after"))
+	Equal(t, "-before\n+after\n", Diff("before", "after"))
 }
 
 func TestHasSuffix(t *testing.T) {

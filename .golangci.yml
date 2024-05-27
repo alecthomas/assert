@@ -52,6 +52,8 @@ linters:
     - structcheck
     - deadcode
     - nosnakecase
+    - mnd
+    - perfsprint
 
 linters-settings:
   govet:

@@ -87,7 +87,7 @@ func Equal[T any](t testing.TB, expected, actual T, msgArgsAndCompareOptions ...
 	}
 	t.Helper()
 	msg := formatMsgAndArgs("Expected values to be equal:", msgArgsAndCompareOptions...)
-	t.Fatalf("%s\n%s", msg, diff(expected, actual, compareOptions...))
+	t.Fatalf("%s\n%s", msg, Diff(expected, actual, compareOptions...))
 }
 
 // NotEqual asserts that "expected" is not equal to "actual".
@@ -165,7 +165,7 @@ func EqualError(t testing.TB, err error, errString string, msgAndArgs ...any) {
 	}
 	if err.Error() != errString {
 		msg := formatMsgAndArgs("Error message not as expected:", msgAndArgs...)
-		t.Fatalf("%s\n%s", msg, diff(errString, err.Error()))
+		t.Fatalf("%s\n%s", msg, Diff(errString, err.Error()))
 	}
 }
 
@@ -248,7 +248,8 @@ func NotPanics(t testing.TB, fn func(), msgAndArgs ...any) {
 	fn()
 }
 
-func diff[T any](before, after T, compareOptions ...CompareOption) string {
+// Diff returns a unified diff of the string representation of two values.
+func Diff[T any](before, after T, compareOptions ...CompareOption) string {
 	var lhss, rhss string
 	// Special case strings so we get nice diffs.
 	if l, ok := any(before).(string); ok {
