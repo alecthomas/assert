@@ -88,7 +88,7 @@ func False(t testing.TB, ok bool, msgAndArgs ...interface{})
 
 ## Evaluation process
 
-Our empircal data of testify usage comes from a monorepo with around 50K lines
+Our empirical data of testify usage comes from a monorepo with around 50K lines
 of tests.
 
 These are the usage counts for all testify functions, normalised to the base
