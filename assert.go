@@ -113,8 +113,19 @@ func Contains(t testing.TB, haystack string, needle string, msgAndArgs ...any) {
 	t.Fatalf("%s\nNeedle: %q\nHaystack: %q\n", msg, needle, haystack)
 }
 
-// ContainsItem asserts that "haystack" contains "needle".
-func ContainsItem[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...interface{}) {
+// NotContains asserts that "haystack" does not contain "needle".
+func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...any) {
+	if !strings.Contains(haystack, needle) {
+		return
+	}
+	t.Helper()
+	msg := formatMsgAndArgs("Haystack should not contain needle.", msgAndArgs...)
+	quotedHaystack, quotedNeedle, positions := needlePosition(haystack, needle)
+	t.Fatalf("%s\nNeedle: %s\nHaystack: %s\n          %s\n", msg, quotedNeedle, quotedHaystack, positions)
+}
+
+// SliceContains asserts that "haystack" contains "needle".
+func SliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...interface{}) {
 	t.Helper()
 	for _, item := range haystack {
 		if objectsAreEqual(item, needle) {
@@ -128,15 +139,17 @@ func ContainsItem[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...int
 	t.Fatalf("%s\nNeedle: %s\nHaystack: %s\n", msg, needleRepr, haystackRepr)
 }
 
-// NotContains asserts that "haystack" does not contain "needle".
-func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...any) {
-	if !strings.Contains(haystack, needle) {
-		return
-	}
+// NotSliceContains asserts that "haystack" does not contain "needle".
+func NotSliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...interface{}) {
 	t.Helper()
-	msg := formatMsgAndArgs("Haystack should not contain needle.", msgAndArgs...)
-	quotedHaystack, quotedNeedle, positions := needlePosition(haystack, needle)
-	t.Fatalf("%s\nNeedle: %s\nHaystack: %s\n          %s\n", msg, quotedNeedle, quotedHaystack, positions)
+	for _, item := range haystack {
+		if objectsAreEqual(item, needle) {
+			msg := formatMsgAndArgs("Haystack should not contain needle.", msgAndArgs...)
+			needleRepr := repr.String(needle, repr.Indent("  "))
+			haystackRepr := repr.String(haystack, repr.Indent("  "))
+			t.Fatalf("%s\nNeedle: %s\nHaystack: %s\n", msg, needleRepr, haystackRepr)
+		}
+	}
 }
 
 // Zero asserts that a value is its zero value.

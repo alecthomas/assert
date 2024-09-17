@@ -65,21 +65,30 @@ func TestContains(t *testing.T) {
 	})
 }
 
-func TestContainsItem(t *testing.T) {
-	assertOk(t, "Found", func(t testing.TB) {
-		ContainsItem(t, []string{"hello", "world"}, "hello")
-	})
-	assertFail(t, "NotFound", func(t testing.TB) {
-		ContainsItem(t, []string{"hello", "world"}, "goodbye")
-	})
-}
-
 func TestNotContains(t *testing.T) {
 	assertOk(t, "NotFound", func(t testing.TB) {
 		NotContains(t, "a haystack with a needle in it", "screw")
 	})
 	assertFail(t, "Found", func(t testing.TB) {
 		NotContains(t, "a haystack with a needle in it", "needle")
+	})
+}
+
+func TestSliceContains(t *testing.T) {
+	assertOk(t, "Found", func(t testing.TB) {
+		SliceContains(t, []string{"hello", "world"}, "hello")
+	})
+	assertFail(t, "NotFound", func(t testing.TB) {
+		SliceContains(t, []string{"hello", "world"}, "goodbye")
+	})
+}
+
+func TestNotSliceContains(t *testing.T) {
+	assertOk(t, "NotFound", func(t testing.TB) {
+		NotSliceContains(t, []string{"hello", "world"}, "goodbye")
+	})
+	assertFail(t, "Found", func(t testing.TB) {
+		NotSliceContains(t, []string{"hello", "world"}, "hello")
 	})
 }
 
