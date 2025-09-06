@@ -125,7 +125,7 @@ func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...any
 }
 
 // SliceContains asserts that "haystack" contains "needle".
-func SliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...interface{}) {
+func SliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...any) {
 	t.Helper()
 	for _, item := range haystack {
 		if objectsAreEqual(item, needle) {
@@ -140,7 +140,7 @@ func SliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...in
 }
 
 // NotSliceContains asserts that "haystack" does not contain "needle".
-func NotSliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...interface{}) {
+func NotSliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...any) {
 	t.Helper()
 	for _, item := range haystack {
 		if objectsAreEqual(item, needle) {
