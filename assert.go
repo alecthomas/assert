@@ -164,6 +164,7 @@ func Zero[T any](t testing.TB, value T, msgAndArgs ...any) {
 		if val.Len() == 0 {
 			return
 		}
+	default:
 	}
 	t.Helper()
 	msg := formatMsgAndArgs("Expected a zero value but got:", msgAndArgs...)
@@ -177,9 +178,11 @@ func NotZero[T any](t testing.TB, value T, msgAndArgs ...any) {
 		val := reflect.ValueOf(value)
 		switch val.Kind() {
 		case reflect.Slice, reflect.Map, reflect.Array:
-			if val.Len() == 0 {
+			if val.Len() > 0 {
 				return
 			}
+		default:
+			return
 		}
 	}
 	t.Helper()
