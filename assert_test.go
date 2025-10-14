@@ -217,11 +217,11 @@ type testTester struct {
 	failed string
 }
 
-func (t *testTester) Fatalf(message string, args ...interface{}) {
+func (t *testTester) Fatalf(message string, args ...any) {
 	t.failed = fmt.Sprintf(message, args...)
 }
 
-func (t *testTester) Fatal(args ...interface{}) {
+func (t *testTester) Fatal(args ...any) {
 	t.failed = fmt.Sprint(args...)
 }
 

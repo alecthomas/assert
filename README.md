@@ -1,6 +1,6 @@
 # A simple assertion library using Go generics
 
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/alecthomas/assert/v2)](https://pkg.go.dev/github.com/alecthomas/assert/v2) [![CI](https://github.com/alecthomas/assert/actions/workflows/ci.yml/badge.svg)](https://github.com/alecthomas/assert/actions/workflows/ci.yml) 
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/alecthomas/assert/v2)](https://pkg.go.dev/github.com/alecthomas/assert/v2) [![CI](https://github.com/alecthomas/assert/actions/workflows/ci.yml/badge.svg)](https://github.com/alecthomas/assert/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/alecthomas/assert/v2)](https://goreportcard.com/report/github.com/alecthomas/assert/v2) [![Slack chat](https://img.shields.io/static/v1?logo=slack&style=flat&label=slack&color=green&message=gophers)](https://gophers.slack.com/messages/CN9DS8YF3)
 
 
@@ -35,55 +35,55 @@ format error messages using the `fmt` package.
 // Equal asserts that "expected" and "actual" are equal using google/go-cmp.
 //
 // If they are not, a diff of the Go representation of the values will be displayed.
-func Equal[T comparable](t testing.TB, expected, actual T, msgAndArgs ...interface{})
+func Equal[T comparable](t testing.TB, expected, actual T, msgAndArgs ...any)
 
 // NotEqual asserts that "expected" is not equal to "actual" using google/go-cmp.
 //
 // If they are equal the expected value will be displayed.
-func NotEqual[T comparable](t testing.TB, expected, actual T, msgAndArgs ...interface{})
+func NotEqual[T comparable](t testing.TB, expected, actual T, msgAndArgs ...any)
 
 // Zero asserts that a value is its zero value.
-func Zero[T comparable](t testing.TB, value T, msgAndArgs ...interface{})
+func Zero[T comparable](t testing.TB, value T, msgAndArgs ...any)
 
 // NotZero asserts that a value is not its zero value.
-func NotZero[T comparable](t testing.TB, value T, msgAndArgs ...interface{})
+func NotZero[T comparable](t testing.TB, value T, msgAndArgs ...any)
 
 // Contains asserts that "haystack" contains "needle".
-func Contains(t testing.TB, haystack string, needle string, msgAndArgs ...interface{})
+func Contains(t testing.TB, haystack string, needle string, msgAndArgs ...any)
 
 // NotContains asserts that "haystack" does not contain "needle".
-func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...interface{})
+func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...any)
 
 // EqualError asserts that either an error is non-nil and that its message is what is expected,
 // or that error is nil if the expected message is empty.
-func EqualError(t testing.TB, err error, errString string, msgAndArgs...interface{})
+func EqualError(t testing.TB, err error, errString string, msgAndArgs ...any)
 
 // Error asserts that an error is not nil.
-func Error(t testing.TB, err error, msgAndArgs ...interface{})
+func Error(t testing.TB, err error, msgAndArgs ...any)
 
 // NoError asserts that an error is nil.
-func NoError(t testing.TB, err error, msgAndArgs ...interface{})
+func NoError(t testing.TB, err error, msgAndArgs ...any)
 
 // IsError asserts than any error in "err"'s tree matches "target".
-func IsError(t testing.TB, err, target error, msgAndArgs ...interface{})
+func IsError(t testing.TB, err, target error, msgAndArgs ...any)
 
 // NotIsError asserts than no error in "err"'s tree matches "target".
-func NotIsError(t testing.TB, err, target error, msgAndArgs ...interface{})
+func NotIsError(t testing.TB, err, target error, msgAndArgs ...any)
 
 // Panics asserts that the given function panics.
-func Panics(t testing.TB, fn func(), msgAndArgs ...interface{})
+func Panics(t testing.TB, fn func(), msgAndArgs ...any)
 
 // NotPanics asserts that the given function does not panic.
-func NotPanics(t testing.TB, fn func(), msgAndArgs ...interface{})
+func NotPanics(t testing.TB, fn func(), msgAndArgs ...any)
 
 // Compare two values for equality and return true or false.
 func Compare[T any](t testing.TB, x, y T) bool
 
 // True asserts that an expression is true.
-func True(t testing.TB, ok bool, msgAndArgs ...interface{})
+func True(t testing.TB, ok bool, msgAndArgs ...any)
 
 // False asserts that an expression is false.
-func False(t testing.TB, ok bool, msgAndArgs ...interface{})
+func False(t testing.TB, ok bool, msgAndArgs ...any)
 ```
 
 ## Evaluation process

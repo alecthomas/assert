@@ -125,7 +125,7 @@ func NotContains(t testing.TB, haystack string, needle string, msgAndArgs ...any
 }
 
 // SliceContains asserts that "haystack" contains "needle".
-func SliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...interface{}) {
+func SliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...any) {
 	t.Helper()
 	for _, item := range haystack {
 		if objectsAreEqual(item, needle) {
@@ -140,7 +140,7 @@ func SliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...in
 }
 
 // NotSliceContains asserts that "haystack" does not contain "needle".
-func NotSliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...interface{}) {
+func NotSliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ...any) {
 	t.Helper()
 	for _, item := range haystack {
 		if objectsAreEqual(item, needle) {
@@ -159,8 +159,12 @@ func Zero[T any](t testing.TB, value T, msgAndArgs ...any) {
 		return
 	}
 	val := reflect.ValueOf(value)
-	if (val.Kind() == reflect.Slice || val.Kind() == reflect.Map || val.Kind() == reflect.Array) && val.Len() == 0 {
-		return
+	switch val.Kind() {
+	case reflect.Slice, reflect.Map, reflect.Array:
+		if val.Len() == 0 {
+			return
+		}
+	default:
 	}
 	t.Helper()
 	msg := formatMsgAndArgs("Expected a zero value but got:", msgAndArgs...)
@@ -172,7 +176,12 @@ func NotZero[T any](t testing.TB, value T, msgAndArgs ...any) {
 	var zero T
 	if !objectsAreEqual(value, zero) {
 		val := reflect.ValueOf(value)
-		if !((val.Kind() == reflect.Slice || val.Kind() == reflect.Map || val.Kind() == reflect.Array) && val.Len() == 0) {
+		switch val.Kind() {
+		case reflect.Slice, reflect.Map, reflect.Array:
+			if val.Len() > 0 {
+				return
+			}
+		default:
 			return
 		}
 	}
