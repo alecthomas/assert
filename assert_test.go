@@ -4,11 +4,20 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 )
 
 type Data struct {
 	Str string
 	Num int64
+}
+
+type MyTime struct {
+	time.Time
+}
+
+type MyStruct struct {
+	TheTime *MyTime
 }
 
 func TestEqual(t *testing.T) {
@@ -35,6 +44,9 @@ func TestEqual(t *testing.T) {
 	})
 	assertOk(t, "Exclude", func(t testing.TB) {
 		Equal(t, Data{Str: "expected", Num: 1234}, Data{Str: "expected"}, Exclude[int64]())
+	})
+	assertOk(t, "Embedded time.Time", func(t testing.TB) {
+		Equal(t, MyStruct{}, MyStruct{})
 	})
 }
 
