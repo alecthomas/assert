@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"iter"
 	"reflect"
 	"strconv"
 	"strings"
@@ -150,6 +151,39 @@ func NotSliceContains[T any](t testing.TB, haystack []T, needle T, msgAndArgs ..
 			t.Fatalf("%s\nNeedle: %s\nHaystack: %s\n", msg, needleRepr, haystackRepr)
 		}
 	}
+}
+
+// SeqContains asserts that "haystack" contains "needle", but only checks, at most,
+// maxChecked items (since a Seq can be infinite). If this is <= 0 there is no limit.
+func SeqContains[T any](t testing.TB, haystack iter.Seq[T], needle T, maxChecked int, msgAndArgs ...interface{}) {
+	t.Helper()
+
+	found := false
+	count := 0
+	haystack(func(item T) bool {
+		if objectsAreEqual(item, needle) {
+			found = true
+			return false
+		}
+
+		if maxChecked > 0 {
+			count++
+			if count >= maxChecked {
+				return false
+			}
+		}
+
+		return true
+	})
+
+	if found {
+		return
+	}
+
+	msg := formatMsgAndArgs("Haystack does not contain needle.", msgAndArgs...)
+	needleRepr := repr.String(needle, repr.Indent("  "))
+	haystackRepr := repr.String(haystack, repr.Indent("  "))
+	t.Fatalf("%s\nNeedle: %s\nHaystack: %s\n", msg, needleRepr, haystackRepr)
 }
 
 // Zero asserts that a value is its zero value.
