@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 )
 
 type Data struct {
@@ -41,6 +42,17 @@ func TestEqual(t *testing.T) {
 func TestEqualStrings(t *testing.T) {
 	assertFail(t, "IdenticalStrings", func(t testing.TB) {
 		Equal(t, "hello\nworld", "goodbye\nworld")
+	})
+}
+
+func TestEqualTime(t *testing.T) {
+	assertOk(t, "Same instant different location", func(t testing.TB) {
+		utc := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+		other := utc.In(time.FixedZone("UTC+1", 3600))
+		Equal(t, utc, other)
+	})
+	assertFail(t, "Different instants", func(t testing.TB) {
+		Equal(t, time.Unix(1, 0), time.Unix(2, 0))
 	})
 }
 
