@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/alecthomas/repr"
 	"github.com/hexops/gotextdiff"
@@ -351,6 +352,14 @@ func objectsAreEqual(expected, actual any, options ...CompareOption) bool {
 	if exp, eok := expected.(string); eok {
 		if act, aok := actual.(string); aok {
 			return exp == act
+		}
+	}
+	if exp, eok := expected.(time.Time); eok {
+		if act, aok := actual.(time.Time); aok {
+			// Compare instants rather than representation: two time.Time values
+			// in different locations can refer to the same instant and should
+			// be considered equal.
+			return exp.Equal(act)
 		}
 	}
 
